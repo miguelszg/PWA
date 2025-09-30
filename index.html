@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    
+    <!-- Meta tags básicos -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="PWA Shop - Tu tienda progresiva con funcionalidad offline" />
+    <meta name="keywords" content="PWA, tienda, ecommerce, offline, progressive web app" />
+    <meta name="author" content="PWA Shop Team" />
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#2563eb" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="PWA Shop" />
+    
+    <!-- Microsoft Tags -->
+    <meta name="msapplication-TileColor" content="#2563eb" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="msapplication-config" content="/browserconfig.xml" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://pwa-shop.example.com/" />
+    <meta property="og:title" content="PWA Shop - Tu Tienda Progresiva" />
+    <meta property="og:description" content="Aplicación web progresiva con funcionalidad offline" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://pwa-shop.example.com/" />
+    <meta property="twitter:title" content="PWA Shop - Tu Tienda Progresiva" />
+    <meta property="twitter:description" content="Aplicación web progresiva con funcionalidad offline" />
+    
+    <!-- Título -->
+    <title>PWA Shop - Tu Tienda Progresiva</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/pwa-192192.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/pwa-64x64.png" />
+    <link rel="shortcut icon" href="/pwa-64x64.png" />
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- Preconnect para mejorar performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    
+    <!-- Inline critical CSS para primera carga -->
+    <style>
+      /* Critical CSS - Se carga antes que todo */
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      }
+      
+      #root {
+        min-height: 100vh;
+      }
+      
+      /* Loader inicial */
+      .app-loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #2563eb;
+        z-index: 9999;
+      }
+      
+      .app-loader-content {
+        text-align: center;
+        color: white;
+      }
+      
+      .app-loader-spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 20px;
+      }
+      
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+      
+      /* Ocultar loader cuando la app carga */
+      .app-loaded .app-loader {
+        display: none;
+      }
+      
+      /* Estilos para modo offline */
+      body.offline::before {
+        content: 'Modo Offline';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: #ef4444;
+        color: white;
+        text-align: center;
+        padding: 4px;
+        font-size: 12px;
+        font-weight: 600;
+        z-index: 9998;
+      }
+      
+      body.offline #root {
+        margin-top: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Loader inicial -->
+    <div class="app-loader">
+      <div class="app-loader-content">
+        <div class="app-loader-spinner"></div>
+        <h2>PWA Shop</h2>
+        <p>Cargando...</p>
+      </div>
+    </div>
+    
+    <!-- App Container -->
+    <div id="root"></div>
+    
+    <!-- No Script Fallback -->
+    <noscript>
+      <div style="text-align: center; padding: 50px; font-family: sans-serif;">
+        <h1>JavaScript Requerido</h1>
+        <p>Esta aplicación requiere JavaScript para funcionar.</p>
+        <p>Por favor, habilita JavaScript en tu navegador.</p>
+      </div>
+    </noscript>
+    
+    <!-- Script principal -->
+    <script type="module" src="/src/main.jsx"></script>
+    
+    <!-- Script para ocultar el loader -->
+    <script>
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          document.body.classList.add('app-loaded');
+        }, 500);
+      });
+      
+      // Detectar estado de instalación
+      let deferredPrompt;
+      
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        console.log('💾 PWA instalable - Prompt guardado');
+        
+        // Disparar evento personalizado para que la app lo maneje
+        window.dispatchEvent(new CustomEvent('pwa-installable', { detail: e }));
+      });
+      
+      window.addEventListener('appinstalled', () => {
+        console.log('✅ PWA instalada correctamente');
+        deferredPrompt = null;
+      });
+      
+      // Función global para instalar PWA
+      window.installPWA = async () => {
+        if (!deferredPrompt) {
+          console.log('❌ No hay prompt de instalación disponible');
+          return false;
+        }
+        
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log(`👤 Usuario ${outcome === 'accepted' ? 'aceptó' : 'rechazó'} la instalación`);
+        deferredPrompt = null;
+        return outcome === 'accepted';
+      };
+    </script>
+  </body>
+</html>
