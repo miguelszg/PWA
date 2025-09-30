@@ -1,81 +1,22 @@
 {
-  "name": "PWA Shop - Tu Tienda Progresiva",
-  "short_name": "PWA Shop",
-  "description": "Aplicación web progresiva de comercio electrónico con funcionalidad offline. Navega productos, noticias y gestiona tareas incluso sin conexión.",
+  "name": "ShopHub - Progressive Store",
+  "short_name": "ShopHub",
+  "description": "Tu experiencia de compra progresiva",
   "start_url": "/",
-  "scope": "/",
   "display": "standalone",
-  "orientation": "portrait-primary",
-  "theme_color": "#2563eb",
   "background_color": "#ffffff",
-  "lang": "es-ES",
-  "dir": "ltr",
-  "categories": ["shopping", "productivity", "business"],
+  "theme_color": "#4F46E5",
+  "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/pwa-64x64.png",
-      "sizes": "64x64",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/pwa-192x192.png",
+      "src": "/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
+      "type": "image/png"
     },
     {
-      "src": "/pwa-512x512.png",
+      "src": "/icon-512.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/pwa-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "Productos",
-      "short_name": "Productos",
-      "description": "Ver catálogo de productos",
-      "url": "/?view=products",
-      "icons": [
-        {
-          "src": "/icon-products.png",
-          "sizes": "96x96",
-          "type": "image/png"
-        }
-      ]
-    },
-    {
-      "name": "Noticias",
-      "short_name": "Noticias",
-      "description": "Últimas noticias",
-      "url": "/?view=news",
-      "icons": [
-        {
-          "src": "/icon-news.png",
-          "sizes": "96x96",
-          "type": "image/png"
-        }
-      ]
-    },
-    {
-      "name": "Tareas",
-      "short_name": "Tareas",
-      "description": "Gestionar tareas",
-      "url": "/?view=tasks",
-      "icons": [
-        {
-          "src": "/icon-tasks.png",
-          "sizes": "96x96",
-          "type": "image/png"
-        }
-      ]
+      "type": "image/png"
     }
   ]
 }
